@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quota Display</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      text-align: center;
+      width: 300px;
+    }
+    h2 {
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box; /* Ensures padding doesn't affect width */
+    }
+    .quota-info {
+      text-align: left;
+      margin-bottom: 10px;
+      color: #555;
+    }
+  </style>
+  <script>
+    $(document).ready(function() {
+      $('#input-box').on('input', function() {
+        var userInput = $(this).val();
+        $.ajax({
+          url: 'https://api.b3n.fun/public/dashboard/billing/subscription', // 替换成你的API地址
+          type: 'GET',
+          headers: {
+            "Authorization": "Bearer " + userInput
+          },
+          success: function(data) {
+            var data = {
+              "used_quota": 66433,
+              "remain_quota": 4933567,
+            };
+            $('#used-quota').text('已使用: ' + data.used_quota.toLocaleString());
+            $('#remain-quota').text('剩余: ' + data.remain_quota.toLocaleString());
+            var total = data.used_quota + data.remain_quota;
+            $('#total-quota').text('总计: ' + total.toLocaleString());
+          },
+          error: function(xhr, status, error) {
+            console.error("Error occurred: " + error);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <h2>配额查询</h2>
+  <label for="input-box">请输入查询内容：</label>
+  <input type="text" id="input-box" name="input-box">
+  <div class="quota-info" id="used-quota">已使用: </div>
+  <div class="quota-info" id="remain-quota">剩余: </div>
+  <div class="quota-info" id="total-quota">总计: </div>
+</div>
+
+</body>
+</html>
