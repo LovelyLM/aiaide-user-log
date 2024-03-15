@@ -51,14 +51,14 @@
             "Authorization": "Bearer " + userInput
           },
           success: function(data) {
-            var data = {
-              "used_quota": 66433,
-              "remain_quota": 4933567,
-            };
-            $('#used-quota').text('已使用: ' + data.used_quota.toLocaleString());
-            $('#remain-quota').text('剩余: ' + data.remain_quota.toLocaleString());
-            var total = data.used_quota + data.remain_quota;
-            $('#total-quota').text('总计: ' + total.toLocaleString());
+            var rate = 500000; // 汇率
+            var usedQuotaInDollars = (data.used_quota / rate).toFixed(2);
+            var remainQuotaInDollars = (data.remain_quota / rate).toFixed(2);
+            var totalQuotaInDollars = ((data.used_quota + data.remain_quota) / rate).toFixed(2);
+
+            $('#used-quota').text('已使用: $' + usedQuotaInDollars.toLocaleString());
+            $('#remain-quota').text('剩余: $' + remainQuotaInDollars.toLocaleString());
+            $('#total-quota').text('总计: $' + totalQuotaInDollars.toLocaleString());
           },
           error: function(xhr, status, error) {
             console.error("Error occurred: " + error);
